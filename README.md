@@ -137,5 +137,9 @@
       if (playerX < 340) playerX += 30;
     });
 
-    function startGame()
+    function startGame() {
+      document.getElementById('menu').style.display = 'none';
+      gameInterval = setInterval(() => {
+        gameLoop();
+        if (Math.random() < 0.
     
