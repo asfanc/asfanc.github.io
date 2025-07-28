@@ -60,13 +60,16 @@
     let lives = 3;
 
     const backgroundImg = new Image();
-    backgroundImg.src = 'https://i.imgur.com/kwCOoXt.jpg'; // Japon sokak arka planı
+    backgroundImg.src = ![desktop-wallpaper-japan-nightlife-japan-night-street-iphone](https://github.com/user-attachments/assets/cae626ca-9b65-42cd-8d60-215786fa0d60)
+; // Japon sokak arka planı
 
     const playerImg = new Image();
-    playerImg.src = 'https://i.imgur.com/CKUpu9k.png'; // Nissan GTR R33 görünümü (desenli)
+    playerImg.src = <img width="1024" height="1536" alt="file_000000005f64620a8c0e86bc0e170a4b" src="https://github.com/user-attachments/assets/064ccd88-7b85-46fa-ba0d-365b507c4e22" />
+; // Nissan GTR R33 görünümü (desenli)
 
     const enemyImg = new Image();
-    enemyImg.src = 'https://i.imgur.com/UcE6A8V.png'; // Japon tarzı düşman arabası
+    enemyImg.src = ![images (2)](https://github.com/user-attachments/assets/9592a99f-f791-43a6-acd5-0eec4feaa0cd)
+; // Japon tarzı düşman arabası
 
     let imagesLoaded = 0;
     const totalImages = 3;
