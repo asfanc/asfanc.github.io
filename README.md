@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -36,13 +37,18 @@
   <div id="menu">
     <h1>Tokyo Drift</h1>
     <button id="startBtn">Oyunu Başlat</button>
-  </div>  <div id="score">Puan: 0</div>
-  <div id="lives">Can: 3</div><canvas id="game" width="400" height="600"></canvas>
+  </div>
 
+  <div id="score">Puan: 0</div>
+  <div id="lives">Can: 3</div>
+
+  <canvas id="game" width="400" height="600"></canvas>
   <div id="controls">
     <div class="btn" id="leftBtn">⬅️</div>
     <div class="btn" id="rightBtn">➡️</div>
-  </div>  <script>
+  </div>
+
+  <script>
     const canvas = document.getElementById('game');
     const ctx = canvas.getContext('2d');
 
@@ -53,21 +59,41 @@
     let score = 0;
     let lives = 3;
 
+    const backgroundImg = new Image();
+    backgroundImg.src = 'https://i.imgur.com/kwCOoXt.jpg'; // Japon sokak arka planı
+
+    const playerImg = new Image();
+    playerImg.src = 'https://i.imgur.com/CKUpu9k.png'; // Nissan GTR R33 görünümü (desenli)
+
+    const enemyImg = new Image();
+    enemyImg.src = 'https://i.imgur.com/UcE6A8V.png'; // Japon tarzı düşman arabası
+
+    let imagesLoaded = 0;
+    const totalImages = 3;
+
+    function imageLoaded() {
+      imagesLoaded++;
+      if (imagesLoaded === totalImages) {
+        startGame();
+      }
+    }
+
+    backgroundImg.onload = imageLoaded;
+    playerImg.onload = imageLoaded;
+    enemyImg.onload = imageLoaded;
+
     function drawBackground() {
-      ctx.fillStyle = '#111';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(backgroundImg, 0, 0, 400, 600);
     }
 
     function drawPlayer() {
-      ctx.fillStyle = '#ff3333';
-      ctx.fillRect(playerX, 500, 60, 100);
+      ctx.drawImage(playerImg, playerX, 500, 60, 100);
     }
 
     function drawEnemies() {
-      ctx.fillStyle = '#00ccff';
       for (let i = 0; i < enemies.length; i++) {
         enemies[i].y += speed;
-        ctx.fillRect(enemies[i].x, enemies[i].y, 60, 100);
+        ctx.drawImage(enemyImg, enemies[i].x, enemies[i].y, 60, 100);
 
         if (
           enemies[i].y + 100 > 500 &&
@@ -84,7 +110,9 @@
             alert('Oyun Bitti! Skor: ' + score);
             location.reload();
           }
-        } else if (enemies[i] && enemies[i].y > 600) {
+        }
+
+        else if (enemies[i] && enemies[i].y > 600) {
           enemies.splice(i, 1);
           i--;
           score++;
@@ -99,7 +127,7 @@
     }
 
     function gameLoop() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, 400, 600);
       drawBackground();
       drawPlayer();
       drawEnemies();
@@ -112,33 +140,27 @@
       if (playerX < 340) playerX += 30;
     });
 
-    document.getElementById('startBtn').onclick = () => {
+    function startGame() {
       document.getElementById('menu').style.display = 'none';
       gameInterval = setInterval(() => {
         gameLoop();
         if (Math.random() < 0.03) spawnEnemy();
       }, 30);
+    }
+
+    document.getElementById('startBtn').onclick = () => {
+      if (imagesLoaded === totalImages) {
+        startGame();
+      } else {
+        alert('Görseller yükleniyor, lütfen bekle...');
+      }
     };
-  </script></body>
+  </script>
+</body>
 </html>
-<!DOCTYPE html><html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nissan GTR R33: Tokyo Drift</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #000; overflow: hidden; font-family: sans-serif; }
-    canvas { display: block; margin: 0 auto; background: black; }
-    #menu {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8); color: white; display: flex;
-      flex-direction: column; align-items: center; justify-content: center;
-    }
-    #menu h1 { font-size: 3em; margin-bottom: 20px; color: #ff4c4c; }
-    #startBtn {
-      background: #ff4c4c; color: white; padding: 15px 30px;
-      border: none; font-size: 1.5em; border-radius: 10px; cursor: pointer;
-    }
-    #controls {
-      position    
+
+
+
+
+
+
