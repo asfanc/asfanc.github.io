@@ -53,44 +53,22 @@
     let score = 0;
     let lives = 3;
 
-    // Görseller
-    const backgroundImg = new Image();
-    backgroundImg.src = 'https://i.imgur.com/w1URWjK.jpeg'; // Japon sokakları
-
-    const playerImg = new Image();
-    playerImg.src = 'https://i.imgur.com/Z6y5VvM.png'; // GTR R33 desenli
-
-    const enemyImg = new Image();
-    enemyImg.src = 'https://i.imgur.com/FIQ9F1B.png'; // Japon araba
-
-    let imagesLoaded = 0;
-    const totalImages = 3;
-
-    function imageLoaded() {
-      imagesLoaded++;
-      if (imagesLoaded === totalImages) {
-        startGame();
-      }
-    }
-
-    backgroundImg.onload = imageLoaded;
-    playerImg.onload = imageLoaded;
-    enemyImg.onload = imageLoaded;
-
     function drawBackground() {
-      ctx.drawImage(backgroundImg, 0, 0, 400, 600);
+      ctx.fillStyle = '#111';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
     function drawPlayer() {
-      ctx.drawImage(playerImg, playerX, 500, 60, 100);
+      ctx.fillStyle = '#ff3333';
+      ctx.fillRect(playerX, 500, 60, 100);
     }
 
     function drawEnemies() {
+      ctx.fillStyle = '#00ccff';
       for (let i = 0; i < enemies.length; i++) {
         enemies[i].y += speed;
-        ctx.drawImage(enemyImg, enemies[i].x, enemies[i].y, 60, 100);
+        ctx.fillRect(enemies[i].x, enemies[i].y, 60, 100);
 
-        // Çarpışma kontrolü
         if (
           enemies[i].y + 100 > 500 &&
           enemies[i].y < 600 &&
@@ -106,10 +84,7 @@
             alert('Oyun Bitti! Skor: ' + score);
             location.reload();
           }
-        }
-
-        // Puan kazan
-        else if (enemies[i] && enemies[i].y > 600) {
+        } else if (enemies[i] && enemies[i].y > 600) {
           enemies.splice(i, 1);
           i--;
           score++;
@@ -119,12 +94,12 @@
     }
 
     function spawnEnemy() {
-      const x = Math.floor(Math.random() * 6) * 60; // 0, 60, 120...
+      const x = Math.floor(Math.random() * 6) * 60;
       enemies.push({ x: x, y: -100 });
     }
 
     function gameLoop() {
-      ctx.clearRect(0, 0, 400, 600);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawBackground();
       drawPlayer();
       drawEnemies();
@@ -137,9 +112,13 @@
       if (playerX < 340) playerX += 30;
     });
 
-    function startGame() {
+    document.getElementById('startBtn').onclick = () => {
       document.getElementById('menu').style.display = 'none';
       gameInterval = setInterval(() => {
         gameLoop();
-        if (Math.random() < 0.
+        if (Math.random() < 0.03) spawnEnemy();
+      }, 30);
+    };
+  </script></body>
+</html>
     
