@@ -15,123 +15,112 @@
                 #FFFFFF 100px, /* Beyaz başlangıcı */
                 #FFFFFF 200px /* Beyaz genişliği (Kırmızı ile aynı) */
             );
-            font-family: 'Impact', 'Arial Black', sans-serif; /* Daha sıkı ve kalın bir font */
-            color: #333; /* Genel metin rengi */
+            font-family: 'Impact', 'Arial Black', sans-serif; /* Sıkı ve kalın font */
+            color: #333;
             text-align: center;
             margin: 0;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             min-height: 100vh;
         }
 
-        /* Antalyaspor Logosu Stil Tanımı */
-        .logo-container {
-            width: 180px; /* Logoyu biraz büyüttük */
-            height: 180px;
-            margin-bottom: 30px;
-            background-color: white; 
-            border-radius: 50%;
-            border: 8px solid red; /* Daha kalın kenarlık */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Daha belirgin gölge */
-            position: relative; 
-            overflow: hidden; /* Eğer görsel kullanılırsa taşmayı engeller */
-        }
-        
-        .logo-text {
-            font-size: 36px;
-            font-weight: 900;
-            color: red;
-            text-shadow: 2px 2px 0px #eee; /* Logo metnine hafif gölge */
-            letter-spacing: 2px;
-        }
-
-        /* ANTALYA 07 Başlık Stili - EN SIK VE GÖSTERİŞLİ YAZI BURASI */
+        /* ANTALYA 07 Başlık Stili - SIK ve GÖSTERİŞLİ YAZI */
         #main-title {
-            font-size: 5em; /* Çok büyük font */
+            font-size: 5.5em;
             font-weight: 900; 
-            margin-bottom: 40px;
-            padding: 10px 20px;
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Derin gölge */
-            letter-spacing: 8px; /* Harfler arası boşluk */
-            text-transform: uppercase; /* Tüm harfler büyük */
+            margin-bottom: 50px;
+            padding: 15px 30px;
+            background-color: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            border: 5px solid #FF0000;
         }
 
         /* Başlıktaki Harflerin Kırmızı/Beyaz Sıralı Stili */
         .red-char {
-            color: #FF0000; /* Kırmızı */
-            /* Kırmızı harflere beyaz kontür/gölge ekleyerek sık ve belirgin yaptık */
+            color: #FF0000;
             text-shadow: 
-                 1px  1px 0 #FFFFFF,
-                -1px -1px 0 #FFFFFF,
-                -2px  2px 0 #FFFFFF,
-                 2px -2px 0 #FFFFFF;
+                 2px  2px 0 #FFFFFF,
+                -2px -2px 0 #FFFFFF;
         }
         .white-char {
-            color: #FFFFFF; /* Beyaz */
-            /* Beyaz harflere kırmızı kontür/gölge ekleyerek sık ve belirgin yaptık */
+            color: #FFFFFF;
             text-shadow: 
-                 1px  1px 0 #FF0000,
-                -1px -1px 0 #FF0000,
-                -2px  2px 0 #FF0000,
-                 2px -2px 0 #FF0000,
-                 4px  4px 8px rgba(0, 0, 0, 0.7); /* Derin gölge */
+                 2px  2px 0 #FF0000,
+                -2px -2px 0 #FF0000,
+                 5px  5px 10px rgba(0, 0, 0, 0.8);
         }
 
         /* Hesaplama Sonuçları Alanı */
         #results-container {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 30px 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-            max-width: 650px;
+            background-color: rgba(255, 255, 255, 0.98);
+            padding: 40px 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+            max-width: 700px;
             width: 90%;
             text-align: left;
-            border: 3px solid #FF0000; /* Kırmızı çerçeve */
+            border: 5px solid #FF0000;
         }
 
         h2 {
             color: #FF0000;
-            border-bottom: 4px solid #FF0000; /* Kalın alt çizgi */
-            padding-bottom: 15px;
+            border-bottom: 5px solid #FF0000;
+            padding-bottom: 20px;
             margin-top: 0;
-            font-size: 2em;
+            font-size: 2.2em;
             font-weight: 900;
             text-transform: uppercase;
         }
 
         .time-data {
-            font-size: 1.8em; /* Sonuç metinleri büyük */
-            margin: 20px 0;
-            font-weight: 900; /* Çok kalın */
+            font-size: 2em;
+            margin: 25px 0;
+            font-weight: 900;
             color: #333;
             letter-spacing: 1px;
-            text-shadow: 1px 1px 1px #ccc; /* Metinlere hafif gölge */
+            text-shadow: 1px 1px 2px #ccc;
         }
 
         .label {
-            color: #FF0000; /* Etiketler kırmızı ve kalın */
+            color: #FF0000;
             font-weight: 900;
-            margin-right: 10px;
+            margin-right: 15px;
             display: inline-block;
-            min-width: 150px;
+            min-width: 170px;
+        }
+        
+        /* Doğum Günü Sayacı İçin Özel Stil */
+        #birthday-countdown-container {
+            margin-top: 30px;
+            border-top: 3px dashed #FF0000;
+            padding-top: 30px;
+            text-align: center;
+        }
+
+        #birthday-countdown-container .time-data {
+            font-size: 1.5em; /* Kalan süreyi diğerlerinden biraz küçük tuttuk */
+            color: #FF0000; /* Kalan süreyi kırmızı yaptık */
+        }
+        
+        #countdown-label {
+            color: #333;
+            font-weight: 900;
+            text-shadow: none;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2em;
         }
 
         /* CSS Sonu */
     </style>
 </head>
 <body>
-
-    <div class="logo-container">
-        <span class="logo-text">A S</span> 
-    </div>
 
     <h1 id="main-title"></h1>
 
@@ -142,6 +131,11 @@
         <div class="time-data" id="hours-passed"></div>
         <div class="time-data" id="seconds-passed"></div>
         <div class="time-data" id="update-info"><span class="label">SON GÜNCELLEME:</span> <span id="current-time"></span></div>
+        
+        <div id="birthday-countdown-container">
+            <span id="countdown-label">BİR SONRAKİ DOĞUM GÜNÜNE KALAN SÜRE:</span>
+            <div class="time-data" id="birthday-countdown"></div>
+        </div>
     </div>
 
 
@@ -149,7 +143,6 @@
         // JavaScript Başlangıcı
 
         // 1. Doğum Tarihini Tanımlama
-        // Not: Zamanı 28 Ekim 2025 14:49:45'ten hesaplayacaktır
         const birthDate = new Date('2011-11-28T10:07:00'); 
 
         // 2. ANTALYA 07 Başlığını Oluşturma (Kırmızı-Beyaz Sıralı)
@@ -160,8 +153,6 @@
 
             for (let i = 0; i < titleText.length; i++) {
                 const char = titleText[i];
-                // Harf/Sayı tek (0, 2, 4...) ise kırmızı, çift (1, 3, 5...) ise beyaz
-                // Başlık harflerine kırmızı-beyaz sırasını uyguluyoruz
                 const className = (i % 2 === 0) ? 'red-char' : 'white-char'; 
                 html += `<span class="${className}">${char}</span>`;
             }
@@ -171,7 +162,7 @@
         // 3. Süreyi Hesaplama ve Güncelleme Fonksiyonu
         function updateTime() {
             const now = new Date();
-            const timeDifferenceMs = now - birthDate; // Milisaniye cinsinden fark
+            const timeDifferenceMs = now - birthDate; 
 
             // Hesaplamalar
             const totalSeconds = Math.floor(timeDifferenceMs / 1000);
@@ -185,25 +176,76 @@
             document.getElementById('hours-passed').innerHTML = 
                 `<span class="label">GEÇEN SAAT:</span> ${totalHours.toLocaleString('tr-TR')} SAAT`;
 
-            // Saniye sürekli güncelleneceği için, saniyeyi her zaman yeniden hesaplayıp yazıyoruz.
             document.getElementById('seconds-passed').innerHTML = 
                 `<span class="label">GEÇEN SANİYE:</span> ${totalSeconds.toLocaleString('tr-TR')} SANİYE`;
 
             // Son Güncelleme Zamanını Yazma
             document.getElementById('current-time').textContent = now.toLocaleString('tr-TR');
+            
+            // Doğum Günü Sayacını da güncelle
+            updateBirthdayCountdown(now);
+        }
+        
+        // 4. Doğum Gününe Kalan Süreyi Hesaplama
+        function updateBirthdayCountdown(now) {
+            
+            // Doğum günü ayı ve günü (28 Kasım)
+            const birthMonth = 10; // Kasım (0-indexed: 0=Ocak, 10=Kasım)
+            const birthDay = 28;
+            const birthHour = 10;
+            const birthMinute = 7;
+            const birthSecond = 0;
+
+            // Bir sonraki doğum günü tarihini belirle (28 Kasım 10:07)
+            let nextBirthday = new Date(now.getFullYear(), birthMonth, birthDay, birthHour, birthMinute, birthSecond);
+
+            // Eğer bir sonraki doğum günü zaten geçmişse, gelecek yılki doğum gününü ayarla
+            if (nextBirthday < now) {
+                nextBirthday.setFullYear(now.getFullYear() + 1);
+            }
+
+            let remainingMs = nextBirthday - now;
+
+            if (remainingMs <= 0) {
+                document.getElementById('birthday-countdown').innerHTML = 'İYİ Kİ DOĞDUNUZ! KUTLU OLSUN!';
+                return;
+            }
+
+            // Milisaniyeyi saniye, dakika, saat, gün, ay ve yıla çevirme
+            const seconds = Math.floor((remainingMs / 1000) % 60);
+            const minutes = Math.floor((remainingMs / (1000 * 60)) % 60);
+            const hours = Math.floor((remainingMs / (1000 * 60 * 60)) % 24);
+            const totalDaysRemaining = Math.floor(remainingMs / (1000 * 60 * 60 * 24));
+            
+            // Günleri Yıl/Ay/Gün olarak ayırma (Yaklaşık hesaplama)
+            // Yıl ve ay hesaplamaları, gün sayılarının sabit olmamasından dolayı her zaman *yaklaşık* olacaktır.
+            const remainingYears = Math.floor(totalDaysRemaining / 365.25);
+            let daysAfterYears = totalDaysRemaining % 365.25;
+            
+            const remainingMonths = Math.floor(daysAfterYears / 30.44); // Ortalama ay uzunluğu
+            const remainingDays = Math.floor(daysAfterYears % 30.44);
+
+
+            const resultHtml = `
+                ${remainingYears} YIL, 
+                ${remainingMonths} AY, 
+                ${remainingDays} GÜN, 
+                ${hours} SAAT, 
+                ${minutes} DAKİKA, 
+                ${seconds} SANİYE
+            `;
+
+            document.getElementById('birthday-countdown').innerHTML = resultHtml;
         }
 
         // Başlığı oluştur
         createTitle();
-
-        // Sayfa yüklendiğinde bir kez çalıştır
         updateTime();
 
-        // Her saniye tekrar çalıştır (Saniyeyi sürekli güncellemek için)
+        // Her saniye tekrar çalıştır
         setInterval(updateTime, 1000);
 
         // JavaScript Sonu
     </script>
 </body>
 </html>
-
