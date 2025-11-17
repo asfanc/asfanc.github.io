@@ -2,27 +2,26 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Frikik Oyunu</title>
+<title>Frikik Ustası 3D</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body{margin:0; font-family:Arial, sans-serif; user-select:none; touch-action:none;}
+body{margin:0;font-family:Arial,sans-serif;user-select:none;background:#2c3e50;}
 #menu{
-  position:absolute;width:100%;height:100%;
-  background: url('https://i.ibb.co/W5zqs2S/stadium.jpg') center/cover no-repeat;
-  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  position:absolute;width:100%;height:100%;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;background:#34495e;
 }
-#menu h1{color:white;font-size:48px;text-shadow:0 0 10px black;}
+#menu h1{color:white;font-size:48px;text-shadow:0 0 10px black;margin-bottom:40px;}
 #menu button{
-  padding:12px 24px;margin:8px;border:none;border-radius:10px;background:rgba(255,255,255,0.9);
-  font-size:22px;font-weight:bold;cursor:pointer;
+  padding:14px 28px;margin:10px;border:none;border-radius:10px;
+  background:#f1c40f;color:#2c3e50;font-size:22px;font-weight:bold;cursor:pointer;
 }
-canvas{display:none; background:green;}
+canvas{display:none;background:#27ae60;}
 #controls{
   position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
   display:none;gap:8px;
 }
 #controls button{
-  padding:12px 18px;font-size:18px;border-radius:10px;border:none;cursor:pointer;
+  padding:12px 18px;font-size:18px;border-radius:10px;border:none;cursor:pointer;background:#f39c12;color:white;
 }
 </style>
 </head>
@@ -53,7 +52,7 @@ const menu=document.getElementById("menu"),controls=document.getElementById("con
 let gameStarted=false;
 let player='ronaldo';
 let power=20, curve=0;
-let ball={x:200,y:250,z:0,vx:0,vy:0,vz:0,moving:false};
+let ball={x:0,y:0,z:0,vx:0,vy:0,vz:0,moving:false};
 let freeKickPos=null;
 let wall=[], wallJumping=false, wallJumpStart=0;
 
@@ -72,13 +71,27 @@ const wallColor='#f1c40f', wallAltColor='#e74c3c';
 let keeper={x:450,y:80,w:40,h:60,targetX:450,diving:false,diveTime:0};
 
 // Seçim
-function selectPlayer(p){player=p;console.log("Seçilen:",p);}
-function startGame(){menu.style.display='none';canvas.style.display='block';controls.style.display='flex';gameStarted=true;draw();}
+function selectPlayer(p){player=p;}
+function startGame(){
+  menu.style.display='none';
+  canvas.style.display='block';
+  controls.style.display='flex';
+  gameStarted=true;
+  // Başlangıç pozisyon
+  freeKickPos={x:450,y:450};
+  computeWall();
+}
 canvas.addEventListener('click',e=>{
   const r=canvas.getBoundingClientRect();
-  freeKickPos={x:e.clientX-r.left,y:e.clientY-r.top};
+  freeKickPos={x:e.clientX-r.left, y:e.clientY-r.top};
   computeWall();
 });
+canvas.addEventListener('touchstart',e=>{
+  const r=canvas.getBoundingClientRect();
+  freeKickPos={x:e.touches[0].clientX-r.left, y:e.touches[0].clientY-r.top};
+  computeWall();
+});
+
 function clamp(a,b,c){return Math.max(b,Math.min(c,a));}
 function computeWall(){
   wall=[];
@@ -95,30 +108,33 @@ function computeWall(){
   scheduleWallJump();
 }
 function scheduleWallJump(){wallJumping=true; wallJumpStart=performance.now();}
+
 function drawField(){
-  ctx.fillStyle='green'; ctx.fillRect(0,0,canvas.width,canvas.height);
-  // orta çizgi
+  ctx.fillStyle='#27ae60'; ctx.fillRect(0,0,canvas.width,canvas.height);
   ctx.strokeStyle='white'; ctx.lineWidth=2;
+  // orta çizgi
   ctx.beginPath(); ctx.moveTo(0,canvas.height/2); ctx.lineTo(canvas.width,canvas.height/2); ctx.stroke();
   // kale
   ctx.strokeRect(200,0,500,60);
 }
+
 function drawPlayers(){
   // Bizim oyuncu
   if(freeKickPos){
     const p=players[player];
+    // forma (arkadan)
     ctx.fillStyle=p.form;
     ctx.fillRect(freeKickPos.x-14,freeKickPos.y+10,28,24);
     // baş
     ctx.fillStyle=p.skin;
     ctx.beginPath();ctx.arc(freeKickPos.x,freeKickPos.y-10,10,0,Math.PI*2);ctx.fill();
     if(p.hair){ctx.fillStyle=p.hair;ctx.beginPath();ctx.ellipse(freeKickPos.x,freeKickPos.y-14,8,5,0,0,Math.PI*2);ctx.fill();}
-    // Numara/isim
+    // Numara üstte / isim altta
     ctx.fillStyle='black'; ctx.font='bold 12px Arial'; ctx.textAlign='center';
     ctx.fillText(p.num,freeKickPos.x,freeKickPos.y-22);
     ctx.font='10px Arial'; ctx.fillText(p.name,freeKickPos.x,freeKickPos.y+30);
   }
-  // Roberto Carlos örnek sabit frikik noktası
+  // Roberto Carlos sabit örnek
   const rc=players['roberto'];
   const rcPos={x:300,y:400};
   ctx.fillStyle=rc.form; ctx.fillRect(rcPos.x-14,rcPos.y+10,28,24);
@@ -127,6 +143,7 @@ function drawPlayers(){
   ctx.fillStyle='black'; ctx.font='bold 12px Arial'; ctx.textAlign='center';
   ctx.fillText(rc.num,rcPos.x,rcPos.y-22); ctx.font='10px Arial'; ctx.fillText(rc.name,rcPos.x,rcPos.y+30);
 }
+
 function drawWall(){
   wall.forEach(wp=>{
     let yshift=0;
@@ -139,17 +156,20 @@ function drawWall(){
     ctx.fillText('BARAJ',wp.x,wp.y+yshift-5);
   });
 }
+
 function drawBall(){
   if(ball.moving){
     ball.x+=ball.vx; ball.y+=ball.vy; ball.z+=ball.vz;
-    ball.vz-=1; if(ball.z<0){ball.z=0;ball.moving=false;}
+    ball.vz-=0.5; if(ball.z<0){ball.z=0;ball.moving=false;}
     ctx.fillStyle='white'; ctx.beginPath();ctx.arc(ball.x,ball.y-ball.z,8,0,Math.PI*2);ctx.fill();
   }
 }
+
 function shoot(){
   if(!freeKickPos) return;
-  ball={x:freeKickPos.x,y:freeKickPos.y,z:5,vx:2+power/10,vy:-4, vz:power/10, moving:true};
+  ball={x:freeKickPos.x,y:freeKickPos.y,z:5,vx:0,vy:-power,vz:power/2,moving:true};
 }
+
 function loop(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   drawField(); drawWall(); drawPlayers(); drawBall();
@@ -157,6 +177,5 @@ function loop(){
 }
 loop();
 </script>
-
 </body>
 </html>
