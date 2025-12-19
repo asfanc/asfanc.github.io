@@ -1,181 +1,152 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<title>Frikik Ustası 3D</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>28 Kasım 2011 - 10:07</title>
 <style>
-body{margin:0;font-family:Arial,sans-serif;user-select:none;background:#2c3e50;}
-#menu{
-  position:absolute;width:100%;height:100%;display:flex;flex-direction:column;
-  justify-content:center;align-items:center;background:#34495e;
-}
-#menu h1{color:white;font-size:48px;text-shadow:0 0 10px black;margin-bottom:40px;}
-#menu button{
-  padding:14px 28px;margin:10px;border:none;border-radius:10px;
-  background:#f1c40f;color:#2c3e50;font-size:22px;font-weight:bold;cursor:pointer;
-}
-canvas{display:none;background:#27ae60;}
-#controls{
-  position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
-  display:none;gap:8px;
-}
-#controls button{
-  padding:12px 18px;font-size:18px;border-radius:10px;border:none;cursor:pointer;background:#f39c12;color:white;
-}
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at bottom, #000010, #000);
+    color: #00ffe0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden;
+  }
+  canvas#stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+  .title {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    margin-bottom: 1rem;
+  }
+  .title span {
+    text-shadow: 0 0 8px currentColor, 0 0 16px currentColor;
+    animation: glowColor 2s ease-in-out infinite alternate;
+  }
+  h1 {
+    font-size: 2.4rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+    color: #00ffe0;
+    text-shadow: 0 0 10px #00ffe0, 0 0 20px #00ffff, 0 0 30px #00ffe0;
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  h2 {
+    font-size: 1.2rem;
+    color: #ccc;
+    margin-top: 0;
+    margin-bottom: 2rem;
+  }
+  .time {
+    font-size: 2rem;
+    line-height: 1.6;
+    letter-spacing: 0.5px;
+    white-space: pre-line;
+    color: #b8fff5;
+    text-shadow: 0 0 5px #00ffe0, 0 0 10px #00ffff;
+    animation: glowText 2s ease-in-out infinite alternate;
+  }
+  @keyframes glow {
+    from { text-shadow: 0 0 10px #00ffe0, 0 0 20px #00ffff; }
+    to { text-shadow: 0 0 25px #00ffff, 0 0 40px #00ffe0; }
+  }
+  @keyframes glowText {
+    from { opacity: 0.8; }
+    to { opacity: 1; }
+  }
+  @keyframes glowColor {
+    from { filter: brightness(0.8); }
+    to { filter: brightness(1.3); }
+  }
 </style>
 </head>
 <body>
+  <canvas id="stars"></canvas>
+  <div class="title">
+    <span style="color:#ff0000">A</span>
+    <span style="color:#ffffff">N</span>
+    <span style="color:#ff0000">T</span>
+    <span style="color:#ffffff">A</span>
+    <span style="color:#ff0000">L</span>
+    <span style="color:#ffffff">Y</span>
+    <span style="color:#ff0000">A</span>
+  </div>
+  <h1>Benim Doğumumdan Beri Geçen Süre</h1>
+  <h2>Doğum Tarihim: 28 Kasım 2011 - Saat 10:07</h2>
+  <div class="time" id="counter"></div>
 
-<div id="menu">
-<h1>Frikik Ustası</h1>
-<button onclick="selectPlayer('ronaldo')">Ronaldo</button>
-<button onclick="selectPlayer('talisca')">Talisca</button>
-<button onclick="selectPlayer('rice')">Declan Rice</button>
-<button onclick="selectPlayer('roberto')">Roberto Carlos</button>
-<button onclick="startGame()">A Başlat</button>
-</div>
+  <script>
+    const birthDate = new Date('2011-11-28T10:07:00'); // 28 Kasım 2011 10:07
 
-<canvas id="game" width="900" height="500"></canvas>
-<div id="controls">
-  <button onclick="power+=1">+ Güç</button>
-  <button onclick="power-=1">- Güç</button>
-  <button onclick="curve-=0.2">← Falso</button>
-  <button onclick="curve+=0.2">Falso →</button>
-  <button onclick="shoot()">⚽ Şut</button>
-</div>
+    function updateCounter() {
+      const now = new Date();
+      const diff = now - birthDate;
 
-<script>
-const canvas=document.getElementById("game"),ctx=canvas.getContext("2d");
-const menu=document.getElementById("menu"),controls=document.getElementById("controls");
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
 
-let gameStarted=false;
-let player='ronaldo';
-let power=20, curve=0;
-let ball={x:0,y:0,z:0,vx:0,vy:0,vz:0,moving:false};
-let freeKickPos=null;
-let wall=[], wallJumping=false, wallJumpStart=0;
-
-// Oyuncular
-const players={
-  ronaldo:{name:'Ronaldo',num:7,skin:'#ffe0cc',hair:'#222',form:'#fff'},
-  talisca:{name:'Talisca',num:94,skin:'#2b2b2b',hair:'#fff',form:'#fff'},
-  rice:{name:'Declan Rice',num:41,skin:'#ffe8d6',hair:'#2e2e2e',form:'#fff'},
-  roberto:{name:'Roberto Carlos',num:3,skin:'#ffe0cc',hair:null,form:'#fff'}
-};
-
-// Baraj renk
-const wallColor='#f1c40f', wallAltColor='#e74c3c';
-
-// Kaleci
-let keeper={x:450,y:80,w:40,h:60,targetX:450,diving:false,diveTime:0};
-
-// Seçim
-function selectPlayer(p){player=p;}
-function startGame(){
-  menu.style.display='none';
-  canvas.style.display='block';
-  controls.style.display='flex';
-  gameStarted=true;
-  // Başlangıç pozisyon
-  freeKickPos={x:450,y:450};
-  computeWall();
-}
-canvas.addEventListener('click',e=>{
-  const r=canvas.getBoundingClientRect();
-  freeKickPos={x:e.clientX-r.left, y:e.clientY-r.top};
-  computeWall();
-});
-canvas.addEventListener('touchstart',e=>{
-  const r=canvas.getBoundingClientRect();
-  freeKickPos={x:e.touches[0].clientX-r.left, y:e.touches[0].clientY-r.top};
-  computeWall();
-});
-
-function clamp(a,b,c){return Math.max(b,Math.min(c,a));}
-function computeWall(){
-  wall=[];
-  if(!freeKickPos) return;
-  const goal={x:450,y:40};
-  const dx=goal.x-freeKickPos.x,dy=goal.y-freeKickPos.y;
-  const dist=Math.hypot(dx,dy);
-  let count=dist>420?2:dist>300?3:dist>180?4:5;
-  for(let i=0;i<count;i++){
-    let x=freeKickPos.x+(i-(count-1)/2)*30;
-    let y=freeKickPos.y-130;
-    wall.push({x,y,h:40,w:20});
-  }
-  scheduleWallJump();
-}
-function scheduleWallJump(){wallJumping=true; wallJumpStart=performance.now();}
-
-function drawField(){
-  ctx.fillStyle='#27ae60'; ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.strokeStyle='white'; ctx.lineWidth=2;
-  // orta çizgi
-  ctx.beginPath(); ctx.moveTo(0,canvas.height/2); ctx.lineTo(canvas.width,canvas.height/2); ctx.stroke();
-  // kale
-  ctx.strokeRect(200,0,500,60);
-}
-
-function drawPlayers(){
-  // Bizim oyuncu
-  if(freeKickPos){
-    const p=players[player];
-    // forma (arkadan)
-    ctx.fillStyle=p.form;
-    ctx.fillRect(freeKickPos.x-14,freeKickPos.y+10,28,24);
-    // baş
-    ctx.fillStyle=p.skin;
-    ctx.beginPath();ctx.arc(freeKickPos.x,freeKickPos.y-10,10,0,Math.PI*2);ctx.fill();
-    if(p.hair){ctx.fillStyle=p.hair;ctx.beginPath();ctx.ellipse(freeKickPos.x,freeKickPos.y-14,8,5,0,0,Math.PI*2);ctx.fill();}
-    // Numara üstte / isim altta
-    ctx.fillStyle='black'; ctx.font='bold 12px Arial'; ctx.textAlign='center';
-    ctx.fillText(p.num,freeKickPos.x,freeKickPos.y-22);
-    ctx.font='10px Arial'; ctx.fillText(p.name,freeKickPos.x,freeKickPos.y+30);
-  }
-  // Roberto Carlos sabit örnek
-  const rc=players['roberto'];
-  const rcPos={x:300,y:400};
-  ctx.fillStyle=rc.form; ctx.fillRect(rcPos.x-14,rcPos.y+10,28,24);
-  ctx.fillStyle=rc.skin; ctx.beginPath();ctx.arc(rcPos.x,rcPos.y-10,10,0,Math.PI*2);ctx.fill();
-  if(rc.hair){ctx.fillStyle=rc.hair;ctx.beginPath();ctx.ellipse(rcPos.x,rcPos.y-14,8,5,0,0,Math.PI*2);ctx.fill();}
-  ctx.fillStyle='black'; ctx.font='bold 12px Arial'; ctx.textAlign='center';
-  ctx.fillText(rc.num,rcPos.x,rcPos.y-22); ctx.font='10px Arial'; ctx.fillText(rc.name,rcPos.x,rcPos.y+30);
-}
-
-function drawWall(){
-  wall.forEach(wp=>{
-    let yshift=0;
-    if(wallJumping){
-      const jt=clamp((performance.now()-wallJumpStart)/500,0,1);
-      yshift=Math.sin(jt*Math.PI)*-30;
+      document.getElementById('counter').innerText =
+        `${days} gün\n${hours} saat\n${minutes} dakika\n${seconds} saniye`;
     }
-    ctx.fillStyle=wallColor; ctx.fillRect(wp.x-10,wp.y+yshift,wp.w,wp.h);
-    ctx.fillStyle=wallAltColor; ctx.font='10px Arial'; ctx.textAlign='center';
-    ctx.fillText('BARAJ',wp.x,wp.y+yshift-5);
-  });
-}
 
-function drawBall(){
-  if(ball.moving){
-    ball.x+=ball.vx; ball.y+=ball.vy; ball.z+=ball.vz;
-    ball.vz-=0.5; if(ball.z<0){ball.z=0;ball.moving=false;}
-    ctx.fillStyle='white'; ctx.beginPath();ctx.arc(ball.x,ball.y-ball.z,8,0,Math.PI*2);ctx.fill();
-  }
-}
+    setInterval(updateCounter, 1000);
+    updateCounter();
 
-function shoot(){
-  if(!freeKickPos) return;
-  ball={x:freeKickPos.x,y:freeKickPos.y,z:5,vx:0,vy:-power,vz:power/2,moving:true};
-}
+    // Yıldız animasyonu
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
 
-function loop(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  drawField(); drawWall(); drawPlayers(); drawBall();
-  requestAnimationFrame(loop);
-}
-loop();
-</script>
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    for (let i = 0; i < 200; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.5,
+        speed: Math.random() * 0.3 + 0.05
+      });
+    }
+
+    function animateStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#00ffe0';
+      for (let s of stars) {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        ctx.fill();
+        s.y += s.speed;
+        if (s.y > canvas.height) s.y = 0;
+      }
+      requestAnimationFrame(animateStars);
+    }
+
+    animateStars();
+  </script>
 </body>
 </html>
+
+
+Tamam! 🌟 Artık sayfanın en üstünde ANTALYA yazısı, bir kırmızı bir beyaz renkte harflerle parlayan şekilde görünüyor.
+İstersen bu yazıya devirme (dönme) animasyonu veya yanıp sönme efekti de ekleyebilirim. Hangisini istersin?
