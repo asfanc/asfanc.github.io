@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Antalya - Sana Özel Saat</title>
+  <title>Antalya - Geçen Ömür Sayacı</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -33,6 +33,7 @@
       z-index: 2;
       text-align: center;
       user-select: none;
+      width: 90%; /* Mobil ekranlarda taşma yapmaması için genişlik */
     }
 
     /* Üst kısma eklenen Antalya alanı */
@@ -45,29 +46,36 @@
       margin-bottom: 5px;
     }
 
-    /* Doğum gününe kalan süreyi gösteren alan */
+    /* Bir sonraki doğum gününe kalan süre (Üstteki küçük yazı) */
     .countdown-note {
       font-size: 0.85rem;
       font-weight: 400;
-      color: #ffb703; /* Zarif sarı/altın tonu */
+      color: #ffb703;
       letter-spacing: 1px;
       margin-bottom: 25px;
     }
 
+    /* Yeşille Çizdiğin Büyük Alan: Doğumdan Bugüne Geçen Canlı Süre */
     .time {
-      font-size: 6rem;
-      font-weight: 300;
+      font-size: 2.2rem; /* Çok fazla metin sığacağı için yazı boyutunu mobilde sığacak şekilde optimize ettim */
+      font-weight: 400;
       color: #ffffff;
-      letter-spacing: -2px;
-      line-height: 1;
+      letter-spacing: 0px;
+      line-height: 1.4;
+      margin-bottom: 20px;
     }
 
+    .time span {
+      font-weight: 600;
+      color: #00ffe0; /* Sayıları daha rahat okumak için hafif neon mavi tonu */
+    }
+
+    /* Sarı ile Çizdiğin Alt Kısım: Doğum Tarihin */
     .date {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: 400;
       color: #8a8a93;
-      letter-spacing: 2px;
-      margin-top: 15px;
+      letter-spacing: 1px;
     }
   </style>
 </head>
@@ -79,12 +87,14 @@
     <!-- Antalya Başlığı -->
     <div class="top-info">ANTALYA</div>
     
-    <!-- Doğum Günü Canlı Sayaç Alanı -->
+    <!-- Gelecek Doğum Gününe Kalan Süre -->
     <div class="countdown-note" id="birthday-countdown">Hesaplanıyor...</div>
     
-    <!-- Saat ve Tarih -->
-    <div class="time" id="clock">00:00:00</div>
-    <div class="date" id="date">01 OCAK 2026</div>
+    <!-- YEŞİL ALAN: Doğum Gününden Beri Geçen Toplam Zaman (Canlı) -->
+    <div class="time" id="passed-time">Hesaplanıyor...</div>
+    
+    <!-- SARI ALAN: Doğum Tarihin ve Saatin (Sabit) -->
+    <div class="date">28 Kasım 2011 - 10:07</div>
   </div>
 
   <script>
@@ -127,61 +137,69 @@
     }
     animateStars();
 
-    // --- SAAT, TARİH VE DOĞUM GÜNÜ GERİ SAYIM SİSTEMİ ---
-    function updateClock() {
+    // --- DOĞUM GÜNÜ HESAPLAMA MOTORU ---
+    const dogumTarihi = new Date(2011, 10, 28, 10, 7, 0); // 28 Kasım 2011 10:07 (Yazılımda Kasım = 10. ay)
+
+    function updateCounter() {
       const now = new Date();
       
-      // 1. Canlı Saat Güncellemesi
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
-
-      // 2. Güncel Tarih Güncellemesi
-      const options = { year: 'numeric', month: 'long', day: 'numeric' };
-      document.getElementById('date').textContent = now.toLocaleDateString('tr-TR', options);
-
-      // 3. Doğum Günü Canlı Hesaplayıcı (28 Kasım)
-      const doğumGünüGünü = 28;
-      const doğumGünüAyi = 10; // Kasım ayı (Yazılımda Ocak=0, Kasım=10'dur)
-      const doğumSaati = 10;
-      const doğumDakikası = 7;
-
-      // Hedef yılı belirliyoruz (Bu yıl geçtiyse sonraki yıla kurar)
-      let hedefYıl = now.getFullYear();
-      let bdayTarget = new Date(hedefYıl, doğumGünüAyi, doğumGünüGünü, doğumSaati, doğumDakikası, 0);
+      // --- 1. ÜST ALAN: Gelecek Doğum Gününe Kalan Süre Kontrolü ---
+      const dogumGunuGunu = 28;
+      const dogumGunuAyi = 10;
+      let hedefYil = now.getFullYear();
+      let sonrakiBday = new Date(hedefYil, dogumGunuAyi, dogumGunuGunu, 10, 7, 0);
       
-      if (now > bdayTarget) {
-        hedefYıl += 1;
-        bdayTarget = new Date(hedefYıl, doğumGünüAyi, doğumGünüGünü, doğumSaati, doğumDakikası, 0);
+      if (now > sonrakiBday) {
+        hedefYil += 1;
+        sonrakiBday = new Date(hedefYil, dogumGunuAyi, dogumGunuGunu, 10, 7, 0);
       }
 
       const countdownEl = document.getElementById('birthday-countdown');
-      
-      // Tam doğum günü ve saatinde kutlama yap
-      if (now.getDate() === doğumGünüGünü && now.getMonth() === doğumGünüAyi) {
-        if (now.getHours() === doğumSaati && now.getMinutes() === doğumDakikası) {
-          countdownEl.textContent = "🎉 İYİ Kİ DOĞDUN! TAM ŞU AN DOĞDUN! 🎂🎈";
-          return;
-        } else {
-          countdownEl.textContent = "🎂 BUGÜN SENİN DOĞUM GÜNÜN! MUTLU YILLAR! 🎉";
-          return;
-        }
+      if (now.getDate() === dogumGunuGunu && now.getMonth() === dogumGunuAyi) {
+        countdownEl.textContent = "🎂 BUGÜN SENİN DOĞUM GÜNÜN! MUTLU YILLAR! 🎉";
+      } else {
+        const kalanFark = airspaceCount(now, sonrakiBday);
+        countdownEl.textContent = `⏳ DOĞUM GÜNÜNE: ${kalanFark.gun} GÜN, ${kalanFark.saat} SAAT, ${kalanFark.dakika} DAKİKA, ${kalanFark.saniye} SANİYE KALDI`;
       }
 
-      // Kalan süreyi hesapla
-      const fark = bdayTarget - now;
-      
-      const kalanGün = Math.floor(fark / (1000 * 60 * 60 * 24));
-      const kalanSaat = Math.floor((fark % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const kalanDakika = Math.floor((fark % (1000 * 60 * 60)) / (1000 * 60));
-      const kalanSaniye = Math.floor((fark % (1000 * 60)) / 1000);
+      // --- 2. YEŞİL ALAN: Doğumdan Bugüne Geçen Detaylı Süre Hesabı ---
+      let gecenYil = now.getFullYear() - dogumTarihi.getFullYear();
+      let gecenAy = now.getMonth() - dogumTarihi.getMonth();
+      let gecenGun = now.getDate() - dogumTarihi.getDate();
+      let gecenSaat = now.getHours() - dogumTarihi.getHours();
+      let gecenDakika = now.getMinutes() - dogumTarihi.getMinutes();
+      let gecenSaniye = now.getSeconds() - dogumTarihi.getSeconds();
 
-      countdownEl.textContent = `⏳ DOĞUM GÜNÜNE: ${kalanGün} GÜN, ${kalanSaat} SAAT, ${kalanDakika} DAKİKA, ${kalanSaniye} SANİYE KALDI`;
+      // Negatif değerleri düzeltme (Zaman kaymaları için matematiksel dengeleme)
+      if (gecenSaniye < 0) { gecenSaniye += 60; gecenDakika--; }
+      if (gecenDakika < 0) { gecenDakika += 60; gecenSaat--; }
+      if (gecenSaat < 0) { gecenSaat += 24; gecenGun--; }
+      if (gecenGun < 0) {
+        const oncekiAy = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+        gecenGun += oncekiAy;
+        gecenAy--;
+      }
+      if (gecenAy < 0) { gecenAy += 12; gecenYil--; }
+
+      // Ekrana formatlı şekilde yazdırma
+      document.getElementById('passed-time').innerHTML = 
+        `<span>${gecenYil}</span> Yıl, <span>${gecenAy}</span> Ay, <span>${gecenGun}</span> Gün<br>` +
+        `<span>${gecenSaat}</span> Saat, <span>${gecenDakika}</span> Dakika, <span>${gecenSaniye}</span> Saniye`;
     }
 
-    setInterval(updateClock, 1000);
-    updateClock();
+    // Basit fark hesaplama yardımcı fonksiyonu
+    function airspaceCount(start, end) {
+      const diff = end - start;
+      return {
+        gun: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        saat: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        dakika: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+        saniye: Math.floor((diff % (1000 * 60)) / 1000)
+      };
+    }
+
+    setInterval(updateCounter, 1000);
+    updateCounter();
   </script>
 </body>
 </html>
