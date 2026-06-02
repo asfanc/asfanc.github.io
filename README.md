@@ -146,7 +146,3 @@
   </script>
 </body>
 </html>
-
-
-Tamam! 🌟 Artık sayfanın en üstünde ANTALYA yazısı, bir kırmızı bir beyaz renkte harflerle parlayan şekilde görünüyor.
-İstersen bu yazıya devirme (dönme) animasyonu veya yanıp sönme efekti de ekleyebilirim. Hangisini istersin?
